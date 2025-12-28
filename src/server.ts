@@ -2,6 +2,21 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
+
+dotenv.config();
+
+const app = express();
+const PORT = Number(process.env.PORT);
+
+if (!PORT) {
+  throw new Error('PORT not defined');
+}
+
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 
 import playersRoutes from './routes/playersRoutes';
@@ -11,11 +26,6 @@ import rankingsRoutes from './routes/rankingsRoutes';
 import queueRoutes from './routes/queueRoutes';
 import adminRoutes from './routes/adminRoutes';
 import weeklyEventsRoutes from './routes/weeklyEventsRoutes';
-
-dotenv.config();
-
-const app = express();
-const PORT = Number(process.env.PORT) || 3000;
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [
   'http://localhost:5173',
@@ -35,9 +45,6 @@ app.use(cors({
 }));
 app.use(express.json());
 
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
 
 app.use('/players', playersRoutes);
 app.use('/matches', matchesRoutes);
