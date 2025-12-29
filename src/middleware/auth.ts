@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { supabase } from '../config/supabase';
+import { getSupabase } from '../config/supabase';
+
+const supabase = getSupabase();
 
 export interface AuthRequest extends Request {
   userId?: string;
