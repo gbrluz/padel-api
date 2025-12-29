@@ -1,7 +1,9 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth';
-import { supabase } from '../config/supabase';
+import { getSupabase } from '../config/supabase';
 import { AppError } from '../middleware/errorHandler';
+
+const supabase = getSupabase();
 
 export async function getWeeklyEvent(req: AuthRequest, res: Response) {
   const { id } = req.params;

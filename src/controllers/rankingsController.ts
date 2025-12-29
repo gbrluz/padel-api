@@ -1,7 +1,10 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth';
-import { supabase } from '../config/supabase';
+import { getSupabase } from '../config/supabase';
 import { AppError } from '../middleware/errorHandler';
+import { Player } from 'climb-types';
+
+const supabase = getSupabase();
 
 export async function getRegionalRanking(req: AuthRequest, res: Response) {
   const { state, city, gender, category } = req.query;
@@ -23,15 +26,18 @@ export async function getRegionalRanking(req: AuthRequest, res: Response) {
     throw new AppError(500, 'Failed to fetch regional ranking');
   }
 
-  const ranking = data?.map((player, index) => ({
-    ...player,
+const ranking = data?.map((player: any, index: number) => {
+  const p = player as Player;
+  return {
+    ...p,
     position: index + 1,
-    fullName: player.full_name,
-    rankingPoints: player.ranking_points,
-    totalMatches: player.total_matches,
-    totalWins: player.total_wins,
-    playerId: player.id
-  })) || [];
+    fullName: p.full_name,
+    rankingPoints: p.ranking_points,
+    totalMatches: p.total_matches,
+    totalWins: p.total_wins,
+    playerId: p.id
+  };
+}) || [];
 
   res.json({ ranking });
 }
