@@ -6,11 +6,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
-const PORT = Number(process.env.PORT);
+const PORT = Number(process.env.PORT) || 3000;
 
-if (!PORT) {
-  throw new Error('PORT not defined');
-}
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
