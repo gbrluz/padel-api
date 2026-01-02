@@ -1,6 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createClient, SupabaseClient } from "npm:@supabase/supabase-js@2";
-import { handleCors, jsonResponse, Errors, authenticateAdmin } from "../_shared/index.ts";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import { handleCors, jsonResponse, Errors, authenticateAdmin, authenticateRequest } from "../_shared/index.ts";
 
 const MAX_POINT_DIFFERENCE = 350;
 const MAX_TEAM_BALANCE_DIFF = 200;
@@ -369,7 +369,7 @@ Deno.serve(async (req: Request) => {
   const corsResponse = handleCors(req);
   if (corsResponse) return corsResponse;
 
-  const authResult = await authenticateAdmin(req);
+  const authResult = await authenticateRequest(req);
   if (!authResult.success) {
     return authResult.response;
   }
@@ -573,3 +573,5 @@ Deno.serve(async (req: Request) => {
     return Errors.internal();
   }
 });
+
+export {};

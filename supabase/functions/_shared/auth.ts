@@ -1,5 +1,7 @@
-import { createClient, SupabaseClient, User } from "npm:@supabase/supabase-js@2";
+import { createClient, SupabaseClient, User } from "@supabase/supabase-js";
 import { Errors } from "./response.ts";
+
+declare const Deno: any;
 
 export type AuthResult =
   | { success: true; user: User; supabase: SupabaseClient }
